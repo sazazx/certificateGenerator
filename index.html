@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PNG → PDF Annotator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:      #0d0d12;
+      --surface: #14141e;
+      --panel:   #1c1c2a;
+      --border:  #2c2c42;
+      --accent:  #e8ff47;
+      --red:     #ff6b6b;
+      --text:    #f0eee8;
+      --muted:   #6b6b8a;
+      --r:       10px;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 22px 40px;
+      display: flex; align-items: center; gap: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      width: 34px; height: 34px; background: var(--accent);
+      border-radius: 7px; display: grid; place-items: center;
+      font-size: 16px; font-weight: 800; color: #000; flex-shrink: 0;
+    }
+    .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; }
+    .logo-text em { color: var(--accent); font-style: italic; }
+
+    .stepper {
+      display: flex; align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    .step { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
+    .step.active { color: var(--accent); }
+    .step.done   { color: var(--text); }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--panel); border: 1px solid var(--border);
+      display: grid; place-items: center; font-size: 11px;
+      font-family: 'DM Mono', monospace; transition: all .3s;
+    }
+    .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #000; }
+    .step.done   .step-num { background: var(--border); }
+    .step-line { flex: 1; max-width: 60px; height: 1px; background: var(--border); margin: 0 10px; }
+
+    main { padding: 32px 40px 60px; }
+    .section-heading { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 4px; }
+    .section-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+
+    /* STEP 1 */
+    #step1 { max-width: 620px; }
+    .dropzone {
+      border: 2px dashed var(--border);
+      border-radius: var(--r);
+      padding: 60px 32px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .22s;
+      position: relative;
+      background: var(--surface);
+    }
+    .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(232,255,71,.03); }
+    .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .drop-icon { font-size: 48px; display: block; margin-bottom: 16px; }
+    .drop-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+    .drop-hint { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
+
+    #previewBox {
+      display: none;
+      margin-top: 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      overflow: hidden;
+    }
+    #previewImg {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      display: block;
+      background: #111;
+    }
+    .preview-footer {
+      padding: 12px 18px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .preview-name { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
+    .btn-link { background: none; border: none; color: var(--red); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; }
+
+    .footer-row { margin-top: 20px; display: flex; justify-content: flex-end; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 12px 24px; border-radius: 8px; border: none;
+      font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px;
+      letter-spacing: .04em; cursor: pointer; transition: all .18s;
+    }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-primary:hover { background: #d4ea35; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .35; pointer-events: none; }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--muted); }
+
+    /* STEP 2 */
+    #step2 { display: none; }
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* The key: canvas takes 100% of its column, but the IMAGE inside it controls height */
+    .canvas-container {
+      position: relative;
+      background: #111;
+      border-radius: var(--r);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    /* canvas is sized to match the image natural size, then CSS scales it down */
+    #mainCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    #mainCanvas.placing { cursor: crosshair; }
+
+    /* pin layer sits exactly on top of canvas */
+    #pinLayer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* crosshair guides */
+    .ch {
+      position: absolute;
+      pointer-events: none;
+      display: none;
+    }
+    #chH { height: 1px; left: 0; right: 0; background: rgba(232,255,71,.5); }
+    #chV { width:  1px; top:  0; bottom: 0; background: rgba(232,255,71,.5); }
+
+    .canvas-hint {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,.55);
+      background: rgba(0,0,0,.65); padding: 4px 14px; border-radius: 20px;
+      pointer-events: none; white-space: nowrap;
+    }
+
+    /* pin element */
+    .pin {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: all;
+      cursor: move;
+      user-select: none;
+    }
+    .pin-label {
+      background: rgba(10,10,18,.85);
+      backdrop-filter: blur(6px);
+      border: 1.5px solid var(--accent);
+      border-radius: 6px;
+      padding: 4px 8px 4px 8px;
+      display: flex; align-items: center; gap: 6px;
+      max-width: 240px;
+    }
+    .pin-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pin-del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 14px; line-height: 1; padding: 0; flex-shrink: 0; }
+    .pin-stem { width: 1px; height: 8px; background: var(--accent); }
+    .pin-dot  { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 2px solid #000; }
+
+    /* place-mode banner */
+    .place-bar {
+      display: none;
+      align-items: center; gap: 10px;
+      background: rgba(232,255,71,.07);
+      border: 1px solid rgba(232,255,71,.4);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+      font-size: 12px; font-family: 'DM Mono', monospace;
+    }
+    .place-bar.on { display: flex; }
+    .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+    /* side panel */
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+    .panel-head { padding: 14px 18px 0; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .panel-body { padding: 0 18px 18px; }
+
+    .lbl { display: block; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 5px; margin-top: 12px; }
+    .lbl:first-child { margin-top: 0; }
+    input[type=text], textarea, select, input[type=number] {
+      width: 100%; background: var(--panel); border: 1px solid var(--border);
+      border-radius: 6px; color: var(--text); padding: 9px 11px;
+      font-family: 'DM Mono', monospace; font-size: 12px;
+      outline: none; transition: border-color .18s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+    textarea { resize: vertical; min-height: 64px; }
+    select option { background: var(--panel); }
+    input[type=color] {
+      width: 100%; height: 38px; padding: 3px 6px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: 6px; cursor: pointer; outline: none;
+      transition: border-color .18s;
+    }
+    input[type=color]:focus { border-color: var(--accent); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* layers */
+    .layer-list { display: flex; flex-direction: column; gap: 7px; max-height: 200px; overflow-y: auto; }
+    .layer-item { background: var(--panel); border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; display: flex; align-items: flex-start; gap: 8px; }
+    .layer-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; border: 1px solid rgba(255,255,255,.15); }
+    .layer-info { flex: 1; overflow: hidden; }
+    .layer-name { font-family: 'DM Mono', monospace; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .layer-meta { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .layer-del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 15px; flex-shrink: 0; line-height: 1; padding: 0; }
+    .no-layers { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); text-align: center; padding: 14px 0; }
+
+    .step2-footer { display: flex; gap: 10px; margin-top: 18px; justify-content: flex-end; }
+
+    /* STEP 3 */
+    #step3 { display: none; max-width: 520px; }
+    .done-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 56px 40px; text-align: center; }
+    .done-icon { font-size: 60px; display: block; margin-bottom: 20px; }
+    .done-title { font-family: 'DM Serif Display', serif; font-size: 30px; margin-bottom: 8px; }
+    .done-sub { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+    .done-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    @media(max-width: 820px) {
+      header, .stepper, main { padding-left: 18px; padding-right: 18px; }
+      .editor-layout { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">P</div>
+  <div class="logo-text">PNG<em>→</em>PDF</div>
+</header>
+
+<div class="stepper">
+  <div class="step active" id="si1"><div class="step-num">1</div>Upload</div>
+  <div class="step-line"></div>
+  <div class="step" id="si2"><div class="step-num">2</div>Add Text</div>
+  <div class="step-line"></div>
+  <div class="step" id="si3"><div class="step-num">3</div>Export PDF</div>
+</div>
+
+<main>
+
+  <!-- ══ STEP 1 ══ -->
+  <div id="step1">
+    <div class="section-heading">Upload Image</div>
+    <div class="section-sub">// drop a PNG, JPG or WEBP to begin</div>
+
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp"/>
+      <span class="drop-icon">🖼️</span>
+      <div class="drop-title">Drag &amp; drop your image here</div>
+      <div class="drop-hint">or click to browse &nbsp;·&nbsp; PNG · JPG · WEBP</div>
+    </div>
+
+    <!-- Preview appears here after file selection -->
+    <div id="previewBox">
+      <img id="previewImg" alt="preview"/>
+      <div class="preview-footer">
+        <span class="preview-name" id="previewName"></span>
+        <button class="btn-link" id="btnRemove">✕ Remove</button>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <button class="btn btn-primary" id="btnToStep2" disabled>Continue to Annotate →</button>
+    </div>
+  </div>
+
+  <!-- ══ STEP 2 ══ -->
+  <div id="step2">
+    <div class="section-heading">Add Text</div>
+    <div class="section-sub">// configure text, then click the image to place it</div>
+
+    <div class="place-bar" id="placeBar">
+      <div class="pulse"></div>
+      <span>Now click anywhere on the image to drop the text pin</span>
+      <button class="btn-link" id="btnCancelPlace" style="margin-left:auto; padding:0;">Cancel</button>
+    </div>
+
+    <div class="editor-layout">
+
+      <!-- Canvas side -->
+      <div>
+        <div class="canvas-container" id="canvasContainer">
+          <canvas id="mainCanvas"></canvas>
+          <div id="pinLayer"></div>
+          <div class="ch" id="chH"></div>
+          <div class="ch" id="chV"></div>
+          <div class="canvas-hint" id="canvasHint">Configure text on the right, then click "Place on image"</div>
+        </div>
+      </div>
+
+      <!-- Right panel -->
+      <div>
+        <div class="panel">
+          <div class="panel-head">Text Settings</div>
+          <div class="panel-body">
+            <label class="lbl">Text content</label>
+            <textarea id="txtInput" placeholder="Type your text here…"></textarea>
+
+            <div class="grid2">
+              <div>
+                <label class="lbl">Font size (px)</label>
+                <input type="number" id="txtSize" value="32" min="8" max="200"/>
+              </div>
+              <div>
+                <label class="lbl">Color</label>
+                <input type="color" id="txtColor" value="#ffffff"/>
+              </div>
+            </div>
+
+            <div class="grid2" style="margin-top:12px;">
+              <div>
+                <label class="lbl">Weight</label>
+                <select id="txtWeight">
+                  <option value="normal">Normal</option>
+                  <option value="bold">Bold</option>
+                </select>
+              </div>
+              <div>
+                <label class="lbl">Font family</label>
+                <select id="txtFont">
+                  <option value="sans-serif">Sans-serif</option>
+                  <option value="serif">Serif</option>
+                  <option value="monospace">Mono</option>
+                  <option value="cursive">Cursive</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
+              <button class="btn btn-primary" id="btnPlaceMode" style="width:100%;justify-content:center;">
+                📍 Place on image (click to position)
+              </button>
+              <button class="btn btn-ghost" id="btnAddCenter" style="width:100%;justify-content:center;font-size:12px;">
+                ＋ Add to center
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:14px;">
+          <div class="panel-head">Text Layers <span id="layerCount" style="color:var(--accent);"></span></div>
+          <div class="panel-body">
+            <div class="layer-list" id="layerList">
+              <div class="no-layers" id="noLayers">No text layers yet</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="step2-footer">
+          <button class="btn btn-ghost" id="btnBack">← Back</button>
+          <button class="btn btn-primary" id="btnGenPDF">Confirm &amp; Export PDF ↗</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ STEP 3 ══ -->
+  <div id="step3">
+    <div class="done-card">
+      <span class="done-icon">✅</span>
+      <div class="done-title">PDF is ready!</div>
+      <div class="done-sub">// text composited onto image at full native resolution</div>
+      <div class="done-btns">
+        <button class="btn btn-primary" id="btnDownload">⬇ Download PDF</button>
+        <a class="btn btn-ghost" id="btnOpenPDF" href="#" target="_blank" style="text-decoration:none;">↗ Open in new tab</a>
+        <button class="btn btn-ghost"   id="btnRestart">↺ Start over</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════
+   State
+═══════════════════════════════════════════════ */
+let imgFile    = null;
+let imgEl      = null;
+let layers     = [];   // {id, text, xPct, yPct, size, color, weight, font}
+let pdfDoc    = null;
+let placing    = false;
+
+const canvas   = document.getElementById('mainCanvas');
+const ctx      = canvas.getContext('2d');
+const pinLayer = document.getElementById('pinLayer');
+const chH      = document.getElementById('chH');
+const chV      = document.getElementById('chV');
+
+/* ═══════════════════════════════════════════════
+   Step nav
+═══════════════════════════════════════════════ */
+function goTo(n) {
+  ['step1','step2','step3'].forEach((id,i) => {
+    document.getElementById(id).style.display = (i+1===n) ? 'block' : 'none';
+  });
+  [1,2,3].forEach(i => {
+    const el = document.getElementById('si'+i);
+    el.classList.toggle('active', i===n);
+    el.classList.toggle('done',   i<n);
+  });
+  if (n===2) initCanvas();
+}
+
+/* ═══════════════════════════════════════════════
+   STEP 1
+═══════════════════════════════════════════════ */
+const dz = document.getElementById('dropzone');
+dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('over'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('over'));
+dz.addEventListener('drop',      e => { e.preventDefault(); dz.classList.remove('over'); loadFile(e.dataTransfer.files[0]); });
+document.getElementById('fileInput').addEventListener('change', e => loadFile(e.target.files[0]));
+
+function loadFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  imgFile = file;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const dataUrl = e.target.result;
+
+    // Show preview
+    const img = document.getElementById('previewImg');
+    img.src = dataUrl;
+    document.getElementById('previewName').textContent = file.name;
+    document.getElementById('previewBox').style.display = 'block';
+    document.getElementById('btnToStep2').disabled = false;
+
+    // Pre-load Image element for canvas — wait until fully decoded
+    imgEl = new Image();
+    imgEl.onload = () => { /* ready */ };
+    imgEl.onerror = () => console.error('Image failed to load');
+    imgEl.src = dataUrl;
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('btnRemove').addEventListener('click', () => {
+  imgFile = null; imgEl = null;
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('btnToStep2').disabled = true;
+  document.getElementById('fileInput').value = '';
+});
+
+document.getElementById('btnToStep2').addEventListener('click', () => goTo(2));
+
+/* ═══════════════════════════════════════════════
+   STEP 2 – Canvas
+═══════════════════════════════════════════════ */
+function initCanvas() {
+  const draw = () => {
+    if (!imgEl || !imgEl.naturalWidth) { console.error('Image not ready'); return; }
+    canvas.width  = imgEl.naturalWidth;
+    canvas.height = imgEl.naturalHeight;
+    redraw();
+  };
+  if (imgEl && imgEl.complete && imgEl.naturalWidth > 0 && imgEl.naturalHeight > 0) {
+    draw();
+  } else if (imgEl) {
+    imgEl.onload  = draw;
+    imgEl.onerror = () => console.error('Image failed in initCanvas');
+  }
+}
+
+function redraw() {
+  if (!imgEl || !imgEl.complete || imgEl.naturalWidth === 0) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(imgEl, 0, 0);
+  layers.forEach(drawLayer);
+  renderPins();
+  renderLayerList();
+}
+
+function drawLayer(l) {
+  const x = l.xPct * canvas.width;
+  const y = l.yPct * canvas.height;
+  ctx.save();
+  ctx.font          = `${l.weight} ${l.size}px ${l.font}`;
+  ctx.fillStyle     = l.color;
+  ctx.textAlign     = 'center';
+  ctx.textBaseline  = 'middle';
+  ctx.shadowColor   = 'rgba(0,0,0,0.75)';
+  ctx.shadowBlur    = Math.max(4, l.size * 0.2);
+  ctx.fillText(l.text, x, y);
+  ctx.restore();
+}
+
+/* ─── Pin overlays ─── */
+function renderPins() {
+  pinLayer.innerHTML = '';
+  pinLayer.style.pointerEvents = 'none';
+
+  layers.forEach(l => {
+    const pin = document.createElement('div');
+    pin.className = 'pin';
+    pin.style.cssText = `left:${l.xPct*100}%;top:${l.yPct*100}%;pointer-events:all;`;
+
+    pin.innerHTML = `
+      <div class="pin-label">
+        <span class="pin-text" style="color:${l.color}">${esc(l.text)}</span>
+        <button class="pin-del" data-id="${l.id}">×</button>
+      </div>
+      <div class="pin-stem"></div>
+      <div class="pin-dot"></div>`;
+
+    pin.querySelector('.pin-del').addEventListener('click', e => {
+      e.stopPropagation(); removeLayer(l.id);
+    });
+    makeDraggable(pin, l);
+    pinLayer.appendChild(pin);
+  });
+
+  document.getElementById('canvasHint').style.display = layers.length ? 'none' : '';
+}
+
+function esc(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ─── Drag pins ─── */
+function makeDraggable(el, layer) {
+  let ox, oy, lx, ly;
+  const getRect = () => canvas.getBoundingClientRect();
+
+  const move = e => {
+    const p = e.touches ? e.touches[0] : e;
+    const r = getRect();
+    layer.xPct = Math.min(1, Math.max(0, lx + (p.clientX - ox) / r.width));
+    layer.yPct = Math.min(1, Math.max(0, ly + (p.clientY - oy) / r.height));
+    el.style.left = layer.xPct * 100 + '%';
+    el.style.top  = layer.yPct * 100 + '%';
+  };
+  const up = () => {
+    redraw();
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup',   up);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend',  up);
+  };
+  const down = e => {
+    if (e.target.classList.contains('pin-del')) return;
+    e.preventDefault();
+    const p = e.touches ? e.touches[0] : e;
+    ox = p.clientX; oy = p.clientY;
+    lx = layer.xPct; ly = layer.yPct;
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup',   up);
+    document.addEventListener('touchmove', move, {passive:false});
+    document.addEventListener('touchend',  up);
+  };
+  el.addEventListener('mousedown',  down);
+  el.addEventListener('touchstart', down, {passive:false});
+}
+
+/* ─── Crosshair on canvas hover (only when placing) ─── */
+canvas.addEventListener('mousemove', e => {
+  if (!placing) return;
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  chH.style.cssText = `display:block;top:${y}px;left:0;right:0;`;
+  chV.style.cssText = `display:block;left:${x}px;top:0;bottom:0;`;
+});
+canvas.addEventListener('mouseleave', () => {
+  chH.style.display = 'none';
+  chV.style.display = 'none';
+});
+
+/* ─── Click to place ─── */
+canvas.addEventListener('click', e => {
+  if (!placing) return;
+  const r = canvas.getBoundingClientRect();
+  const xPct = (e.clientX - r.left) / r.width;
+  const yPct = (e.clientY - r.top)  / r.height;
+  addLayer(xPct, yPct);
+  exitPlace();
+});
+
+/* ─── Place mode ─── */
+document.getElementById('btnPlaceMode').addEventListener('click', () => {
+  const txt = document.getElementById('txtInput').value.trim();
+  if (!txt) { document.getElementById('txtInput').focus(); return; }
+  placing = true;
+  canvas.classList.add('placing');
+  document.getElementById('placeBar').classList.add('on');
+});
+document.getElementById('btnCancelPlace').addEventListener('click', exitPlace);
+
+function exitPlace() {
+  placing = false;
+  canvas.classList.remove('placing');
+  document.getElementById('placeBar').classList.remove('on');
+  chH.style.display = 'none';
+  chV.style.display = 'none';
+}
+
+/* ─── Add to center ─── */
+document.getElementById('btnAddCenter').addEventListener('click', () => {
+  const txt = document.getElementById('txtInput').value.trim();
+  if (!txt) { document.getElementById('txtInput').focus(); return; }
+  addLayer(0.5, 0.5);
+});
+
+/* ─── Layer management ─── */
+function addLayer(xPct, yPct) {
+  layers.push({
+    id:     Date.now() + Math.random(),
+    text:   document.getElementById('txtInput').value.trim(),
+    xPct, yPct,
+    size:   parseInt(document.getElementById('txtSize').value) || 32,
+    color:  document.getElementById('txtColor').value,
+    weight: document.getElementById('txtWeight').value,
+    font:   document.getElementById('txtFont').value,
+  });
+  document.getElementById('txtInput').value = '';
+  redraw();
+}
+
+function removeLayer(id) {
+  layers = layers.filter(l => l.id !== id);
+  redraw();
+}
+
+function renderLayerList() {
+  const list = document.getElementById('layerList');
+  document.getElementById('layerCount').textContent = layers.length ? `(${layers.length})` : '';
+  list.innerHTML = '';
+  if (!layers.length) {
+    const empty = document.createElement('div');
+    empty.className = 'no-layers';
+    empty.id = 'noLayers';
+    empty.textContent = 'No text layers yet';
+    list.appendChild(empty);
+    return;
+  }
+  layers.forEach(l => {
+    const row = document.createElement('div');
+    row.className = 'layer-item';
+    row.innerHTML = `
+      <div class="layer-swatch" style="background:${l.color}"></div>
+      <div class="layer-info">
+        <div class="layer-name">${esc(l.text)}</div>
+        <div class="layer-meta">${l.size}px · ${l.weight} · ${l.font}</div>
+      </div>
+      <button class="layer-del">×</button>`;
+    row.querySelector('.layer-del').addEventListener('click', () => removeLayer(l.id));
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('btnBack').addEventListener('click', () => goTo(1));
+
+/* ═══════════════════════════════════════════════
+   Generate PDF
+═══════════════════════════════════════════════ */
+document.getElementById('btnGenPDF').addEventListener('click', () => {
+  // Draw to offscreen canvas at native resolution
+  const off = document.createElement('canvas');
+  off.width  = imgEl.naturalWidth;
+  off.height = imgEl.naturalHeight;
+  const oc = off.getContext('2d');
+  oc.drawImage(imgEl, 0, 0);
+  layers.forEach(l => {
+    const x = l.xPct * off.width;
+    const y = l.yPct * off.height;
+    oc.save();
+    oc.font = `${l.weight} ${l.size}px ${l.font}`;
+    oc.fillStyle = l.color;
+    oc.textAlign = 'center';
+    oc.textBaseline = 'middle';
+    oc.shadowColor = 'rgba(0,0,0,0.75)';
+    oc.shadowBlur  = Math.max(4, l.size * 0.2);
+    oc.fillText(l.text, x, y);
+    oc.restore();
+  });
+
+  const dataUrl = off.toDataURL('image/png');
+  const iw = imgEl.naturalWidth, ih = imgEl.naturalHeight;
+  const { jsPDF } = window.jspdf;
+  const A4w = 595.28, A4h = 841.89;
+  let pw, ph;
+  if (iw/ih >= A4w/A4h) { pw = A4w; ph = A4w*(ih/iw); }
+  else                   { ph = A4h; pw = A4h*(iw/ih); }
+  const orient = pw >= ph ? 'landscape' : 'portrait';
+  const doc = new jsPDF({ orientation: orient, unit: 'pt', format: [pw, ph] });
+  doc.addImage(dataUrl, 'PNG', 0, 0, pw, ph);
+  pdfDoc = doc.output('datauristring');  // base64 data URI — not blocked by sandbox
+  goTo(3);
+  // also wire up the "open in new tab" link
+  document.getElementById('btnOpenPDF').href = pdfDoc;
+});
+
+document.getElementById('btnDownload').addEventListener('click', () => {
+  if (!pdfDoc) return;
+  const filename = (imgFile?.name?.replace(/\.[^.]+$/, '') || 'annotated') + '.pdf';
+  const a = document.createElement('a');
+  a.href = pdfDoc;          // base64 data URI
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
+
+document.getElementById('btnRestart').addEventListener('click', () => {
+  imgFile = null; imgEl = null; layers = []; pdfDoc = null; placing = false;
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('btnToStep2').disabled = true;
+  document.getElementById('fileInput').value = '';
+  goTo(1);
+});
+</script>
+</body>
+</html>
