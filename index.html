@@ -15,46 +15,25 @@
       --panel:   #1c1c2a;
       --border:  #2c2c42;
       --accent:  #e8ff47;
+      --accent2: #47c8ff;
       --red:     #ff6b6b;
       --text:    #f0eee8;
       --muted:   #6b6b8a;
       --r:       10px;
     }
     html, body { height: 100%; }
-    body {
-      font-family: 'Syne', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    header {
-      padding: 22px 40px;
-      display: flex; align-items: center; gap: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-    .logo {
-      width: 34px; height: 34px; background: var(--accent);
-      border-radius: 7px; display: grid; place-items: center;
-      font-size: 16px; font-weight: 800; color: #000; flex-shrink: 0;
-    }
+    header { padding: 22px 40px; display: flex; align-items: center; gap: 14px; border-bottom: 1px solid var(--border); }
+    .logo { width: 34px; height: 34px; background: var(--accent); border-radius: 7px; display: grid; place-items: center; font-size: 16px; font-weight: 800; color: #000; flex-shrink: 0; }
     .logo-text { font-family: 'DM Serif Display', serif; font-size: 20px; }
     .logo-text em { color: var(--accent); font-style: italic; }
 
-    .stepper {
-      display: flex; align-items: center;
-      padding: 20px 40px;
-      border-bottom: 1px solid var(--border);
-    }
+    .stepper { display: flex; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--border); }
     .step { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); transition: color .3s; }
     .step.active { color: var(--accent); }
     .step.done   { color: var(--text); }
-    .step-num {
-      width: 26px; height: 26px; border-radius: 50%;
-      background: var(--panel); border: 1px solid var(--border);
-      display: grid; place-items: center; font-size: 11px;
-      font-family: 'DM Mono', monospace; transition: all .3s;
-    }
+    .step-num { width: 26px; height: 26px; border-radius: 50%; background: var(--panel); border: 1px solid var(--border); display: grid; place-items: center; font-size: 11px; font-family: 'DM Mono', monospace; transition: all .3s; }
     .step.active .step-num { background: var(--accent); border-color: var(--accent); color: #000; }
     .step.done   .step-num { background: var(--border); }
     .step-line { flex: 1; max-width: 60px; height: 1px; background: var(--border); margin: 0 10px; }
@@ -65,181 +44,113 @@
 
     /* STEP 1 */
     #step1 { max-width: 620px; }
-    .dropzone {
-      border: 2px dashed var(--border);
-      border-radius: var(--r);
-      padding: 60px 32px;
-      text-align: center;
-      cursor: pointer;
-      transition: all .22s;
-      position: relative;
-      background: var(--surface);
-    }
+    .dropzone { border: 2px dashed var(--border); border-radius: var(--r); padding: 60px 32px; text-align: center; cursor: pointer; transition: all .22s; position: relative; background: var(--surface); }
     .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(232,255,71,.03); }
     .dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
     .drop-icon { font-size: 48px; display: block; margin-bottom: 16px; }
     .drop-title { font-size: 18px; font-weight: 600; margin-bottom: 6px; }
     .drop-hint { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); }
 
-    #previewBox {
-      display: none;
-      margin-top: 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-    }
-    #previewImg {
-      width: 100%;
-      max-height: 340px;
-      object-fit: contain;
-      display: block;
-      background: #111;
-    }
-    .preview-footer {
-      padding: 12px 18px;
-      display: flex; align-items: center; justify-content: space-between;
-      border-top: 1px solid var(--border);
-    }
+    #previewBox { display: none; margin-top: 18px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+    #previewImg { width: 100%; max-height: 340px; object-fit: contain; display: block; background: #111; }
+    .preview-footer { padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); }
     .preview-name { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
     .btn-link { background: none; border: none; color: var(--red); font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; }
 
     .footer-row { margin-top: 20px; display: flex; justify-content: flex-end; }
 
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 12px 24px; border-radius: 8px; border: none;
-      font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px;
-      letter-spacing: .04em; cursor: pointer; transition: all .18s;
-    }
+    .btn { display: inline-flex; align-items: center; gap: 7px; padding: 12px 24px; border-radius: 8px; border: none; font-family: 'Syne', sans-serif; font-weight: 600; font-size: 13px; letter-spacing: .04em; cursor: pointer; transition: all .18s; }
     .btn-primary { background: var(--accent); color: #000; }
     .btn-primary:hover { background: #d4ea35; transform: translateY(-1px); }
     .btn-primary:disabled { opacity: .35; pointer-events: none; }
     .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
     .btn-ghost:hover { border-color: var(--muted); }
+    .btn-blue { background: var(--accent2); color: #000; }
+    .btn-blue:hover { background: #35b8f0; transform: translateY(-1px); }
 
     /* STEP 2 */
     #step2 { display: none; }
-    .editor-layout {
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 20px;
-      align-items: start;
-    }
+    .editor-layout { display: grid; grid-template-columns: 1fr 330px; gap: 20px; align-items: start; }
 
-    /* The key: canvas takes 100% of its column, but the IMAGE inside it controls height */
-    .canvas-container {
-      position: relative;
-      background: #111;
-      border-radius: var(--r);
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    /* canvas is sized to match the image natural size, then CSS scales it down */
-    #mainCanvas {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
+    .canvas-container { position: relative; background: #111; border-radius: var(--r); overflow: hidden; border: 1px solid var(--border); }
+    #mainCanvas { display: block; width: 100%; height: auto; }
     #mainCanvas.placing { cursor: crosshair; }
 
-    /* pin layer sits exactly on top of canvas */
-    #pinLayer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
+    #pinLayer { position: absolute; inset: 0; pointer-events: none; }
 
-    /* crosshair guides */
-    .ch {
-      position: absolute;
-      pointer-events: none;
-      display: none;
-    }
+    .ch { position: absolute; pointer-events: none; display: none; }
     #chH { height: 1px; left: 0; right: 0; background: rgba(232,255,71,.5); }
-    #chV { width:  1px; top:  0; bottom: 0; background: rgba(232,255,71,.5); }
+    #chV { width: 1px; top: 0; bottom: 0; background: rgba(232,255,71,.5); }
+    #chH2 { height: 1px; left: 0; right: 0; background: rgba(71,200,255,.5); }
+    #chV2 { width: 1px; top: 0; bottom: 0; background: rgba(71,200,255,.5); }
 
-    .canvas-hint {
-      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-      font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,.55);
-      background: rgba(0,0,0,.65); padding: 4px 14px; border-radius: 20px;
-      pointer-events: none; white-space: nowrap;
-    }
+    .canvas-hint { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,.55); background: rgba(0,0,0,.65); padding: 4px 14px; border-radius: 20px; pointer-events: none; white-space: nowrap; }
 
-    /* pin element */
-    .pin {
-      position: absolute;
-      transform: translate(-50%, -100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      pointer-events: all;
-      cursor: move;
-      user-select: none;
-    }
-    .pin-label {
-      background: rgba(10,10,18,.85);
-      backdrop-filter: blur(6px);
-      border: 1.5px solid var(--accent);
-      border-radius: 6px;
-      padding: 4px 8px 4px 8px;
-      display: flex; align-items: center; gap: 6px;
-      max-width: 240px;
-    }
-    .pin-text {
-      font-family: 'DM Mono', monospace;
-      font-size: 11px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    /* text pin */
+    .pin { position: absolute; transform: translate(-50%, -100%); display: flex; flex-direction: column; align-items: center; pointer-events: all; cursor: move; user-select: none; }
+    .pin-label { background: rgba(10,10,18,.85); backdrop-filter: blur(6px); border: 1.5px solid var(--accent); border-radius: 6px; padding: 4px 8px; display: flex; align-items: center; gap: 6px; max-width: 240px; }
+    .pin-text { font-family: 'DM Mono', monospace; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .pin-del { background: none; border: none; color: var(--red); cursor: pointer; font-size: 14px; line-height: 1; padding: 0; flex-shrink: 0; }
     .pin-stem { width: 1px; height: 8px; background: var(--accent); }
     .pin-dot  { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); border: 2px solid #000; }
 
-    /* place-mode banner */
-    .place-bar {
-      display: none;
-      align-items: center; gap: 10px;
-      background: rgba(232,255,71,.07);
-      border: 1px solid rgba(232,255,71,.4);
-      border-radius: 8px;
-      padding: 10px 14px;
-      margin-bottom: 14px;
-      font-size: 12px; font-family: 'DM Mono', monospace;
-    }
+    /* image pin */
+    .img-pin { position: absolute; transform: translate(-50%, -50%); pointer-events: all; cursor: move; user-select: none; }
+    .img-pin-inner { position: relative; display: inline-block; }
+    .img-pin-inner img { display: block; border: 1.5px solid var(--accent2); border-radius: 4px; pointer-events: none; }
+    .img-pin-del { position: absolute; top: -8px; right: -8px; width: 18px; height: 18px; background: var(--red); border: none; border-radius: 50%; color: #fff; font-size: 12px; line-height: 18px; text-align: center; cursor: pointer; padding: 0; }
+    .img-pin-resize { position: absolute; bottom: -8px; right: -8px; width: 16px; height: 16px; background: var(--accent2); border-radius: 3px; cursor: se-resize; border: none; }
+
+    /* place-mode banners */
+    .place-bar { display: none; align-items: center; gap: 10px; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px; font-size: 12px; font-family: 'DM Mono', monospace; }
     .place-bar.on { display: flex; }
-    .pulse { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; flex-shrink: 0; }
+    .place-bar-text  { background: rgba(232,255,71,.07); border: 1px solid rgba(232,255,71,.4); }
+    .place-bar-img   { background: rgba(71,200,255,.07); border: 1px solid rgba(71,200,255,.4); }
+    .pulse  { width: 8px; height: 8px; border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; flex-shrink: 0; }
+    .pulse-y { background: var(--accent); }
+    .pulse-b { background: var(--accent2); }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
 
-    /* side panel */
+    /* tab switcher */
+    .tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 14px; }
+    .tab { flex: 1; padding: 10px; text-align: center; font-size: 12px; font-weight: 600; cursor: pointer; background: var(--panel); color: var(--muted); border: none; font-family: 'Syne', sans-serif; transition: all .18s; }
+    .tab.active { background: var(--surface); color: var(--text); }
+    .tab-text.active  { border-bottom: 2px solid var(--accent); }
+    .tab-image.active { border-bottom: 2px solid var(--accent2); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* panel */
     .panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
     .panel-head { padding: 14px 18px 0; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
     .panel-body { padding: 0 18px 18px; }
 
     .lbl { display: block; font-size: 11px; color: var(--muted); font-family: 'DM Mono', monospace; margin-bottom: 5px; margin-top: 12px; }
     .lbl:first-child { margin-top: 0; }
-    input[type=text], textarea, select, input[type=number] {
-      width: 100%; background: var(--panel); border: 1px solid var(--border);
-      border-radius: 6px; color: var(--text); padding: 9px 11px;
-      font-family: 'DM Mono', monospace; font-size: 12px;
-      outline: none; transition: border-color .18s;
-    }
+    input[type=text], textarea, select, input[type=number] { width: 100%; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 9px 11px; font-family: 'DM Mono', monospace; font-size: 12px; outline: none; transition: border-color .18s; }
     input:focus, textarea:focus, select:focus { border-color: var(--accent); }
     textarea { resize: vertical; min-height: 64px; }
     select option { background: var(--panel); }
-    input[type=color] {
-      width: 100%; height: 38px; padding: 3px 6px; background: var(--panel);
-      border: 1px solid var(--border); border-radius: 6px; cursor: pointer; outline: none;
-      transition: border-color .18s;
-    }
-    input[type=color]:focus { border-color: var(--accent); }
+    input[type=color] { width: 100%; height: 38px; padding: 3px 6px; background: var(--panel); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; outline: none; transition: border-color .18s; }
+    input[type=range] { width: 100%; accent-color: var(--accent2); }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    /* layers */
-    .layer-list { display: flex; flex-direction: column; gap: 7px; max-height: 200px; overflow-y: auto; }
+    /* image upload mini zone */
+    .img-dropzone { border: 2px dashed var(--border); border-radius: 8px; padding: 20px 16px; text-align: center; cursor: pointer; position: relative; background: var(--panel); transition: all .2s; margin-bottom: 12px; }
+    .img-dropzone:hover, .img-dropzone.over { border-color: var(--accent2); background: rgba(71,200,255,.04); }
+    .img-dropzone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+    .img-dropzone-icon { font-size: 28px; display: block; margin-bottom: 6px; }
+    .img-dropzone-text { font-size: 12px; color: var(--muted); font-family: 'DM Mono', monospace; }
+    .img-thumb-row { display: flex; align-items: center; gap: 10px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; margin-bottom: 12px; }
+    .img-thumb { width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #000; flex-shrink: 0; }
+    .img-thumb-name { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .img-thumb-del { background: none; border: none; color: var(--red); font-size: 14px; cursor: pointer; flex-shrink: 0; }
+
+    /* layers list */
+    .layer-list { display: flex; flex-direction: column; gap: 7px; max-height: 180px; overflow-y: auto; }
     .layer-item { background: var(--panel); border: 1px solid var(--border); border-radius: 7px; padding: 8px 10px; display: flex; align-items: flex-start; gap: 8px; }
     .layer-swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; border: 1px solid rgba(255,255,255,.15); }
+    .layer-swatch-img { width: 20px; height: 20px; object-fit: contain; border-radius: 3px; flex-shrink: 0; background: #000; }
     .layer-info { flex: 1; overflow: hidden; }
     .layer-name { font-family: 'DM Mono', monospace; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .layer-meta { font-size: 10px; color: var(--muted); font-family: 'DM Mono', monospace; }
@@ -260,7 +171,7 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-    @media(max-width: 820px) {
+    @media(max-width: 860px) {
       header, .stepper, main { padding-left: 18px; padding-right: 18px; }
       .editor-layout { grid-template-columns: 1fr; }
     }
@@ -276,7 +187,7 @@
 <div class="stepper">
   <div class="step active" id="si1"><div class="step-num">1</div>Upload</div>
   <div class="step-line"></div>
-  <div class="step" id="si2"><div class="step-num">2</div>Add Text</div>
+  <div class="step" id="si2"><div class="step-num">2</div>Annotate</div>
   <div class="step-line"></div>
   <div class="step" id="si3"><div class="step-num">3</div>Export PDF</div>
 </div>
@@ -287,15 +198,12 @@
   <div id="step1">
     <div class="section-heading">Upload Image</div>
     <div class="section-sub">// drop a PNG, JPG or WEBP to begin</div>
-
     <div class="dropzone" id="dropzone">
       <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp"/>
       <span class="drop-icon">🖼️</span>
       <div class="drop-title">Drag &amp; drop your image here</div>
       <div class="drop-hint">or click to browse &nbsp;·&nbsp; PNG · JPG · WEBP</div>
     </div>
-
-    <!-- Preview appears here after file selection -->
     <div id="previewBox">
       <img id="previewImg" alt="preview"/>
       <div class="preview-footer">
@@ -303,7 +211,6 @@
         <button class="btn-link" id="btnRemove">✕ Remove</button>
       </div>
     </div>
-
     <div class="footer-row">
       <button class="btn btn-primary" id="btnToStep2" disabled>Continue to Annotate →</button>
     </div>
@@ -311,83 +218,119 @@
 
   <!-- ══ STEP 2 ══ -->
   <div id="step2">
-    <div class="section-heading">Add Text</div>
-    <div class="section-sub">// configure text, then click the image to place it</div>
+    <div class="section-heading">Annotate</div>
+    <div class="section-sub">// add text or image overlays, then click the image to place them</div>
 
-    <div class="place-bar" id="placeBar">
-      <div class="pulse"></div>
-      <span>Now click anywhere on the image to drop the text pin</span>
-      <button class="btn-link" id="btnCancelPlace" style="margin-left:auto; padding:0;">Cancel</button>
+    <!-- Place-mode banners -->
+    <div class="place-bar place-bar-text" id="placeBar">
+      <div class="pulse pulse-y"></div>
+      <span>Click on the image to place text</span>
+      <button class="btn-link" id="btnCancelPlace" style="margin-left:auto;">Cancel</button>
+    </div>
+    <div class="place-bar place-bar-img" id="placeBarImg">
+      <div class="pulse pulse-b"></div>
+      <span>Click on the image to place the photo</span>
+      <button class="btn-link" id="btnCancelPlaceImg" style="margin-left:auto;">Cancel</button>
     </div>
 
     <div class="editor-layout">
 
-      <!-- Canvas side -->
+      <!-- Canvas -->
       <div>
         <div class="canvas-container" id="canvasContainer">
           <canvas id="mainCanvas"></canvas>
           <div id="pinLayer"></div>
           <div class="ch" id="chH"></div>
           <div class="ch" id="chV"></div>
-          <div class="canvas-hint" id="canvasHint">Configure text on the right, then click "Place on image"</div>
+          <div class="ch" id="chH2"></div>
+          <div class="ch" id="chV2"></div>
+          <div class="canvas-hint" id="canvasHint">Use the panel on the right to add text or images</div>
         </div>
       </div>
 
       <!-- Right panel -->
       <div>
-        <div class="panel">
-          <div class="panel-head">Text Settings</div>
-          <div class="panel-body">
-            <label class="lbl">Text content</label>
-            <textarea id="txtInput" placeholder="Type your text here…"></textarea>
 
-            <div class="grid2">
-              <div>
-                <label class="lbl">Font size (px)</label>
-                <input type="number" id="txtSize" value="32" min="8" max="200"/>
-              </div>
-              <div>
-                <label class="lbl">Color</label>
-                <input type="color" id="txtColor" value="#ffffff"/>
-              </div>
-            </div>
+        <!-- Tab switcher -->
+        <div class="tabs">
+          <button class="tab tab-text active" id="tabText" onclick="switchTab('text')">✏️ Text</button>
+          <button class="tab tab-image" id="tabImage" onclick="switchTab('image')">🖼 Image</button>
+        </div>
 
-            <div class="grid2" style="margin-top:12px;">
-              <div>
-                <label class="lbl">Weight</label>
-                <select id="txtWeight">
-                  <option value="normal">Normal</option>
-                  <option value="bold">Bold</option>
-                </select>
+        <!-- TEXT TAB -->
+        <div class="tab-pane active" id="paneText">
+          <div class="panel">
+            <div class="panel-head">Text Settings</div>
+            <div class="panel-body">
+              <label class="lbl">Text content</label>
+              <textarea id="txtInput" placeholder="Type your text here…"></textarea>
+              <div class="grid2">
+                <div><label class="lbl">Font size (px)</label><input type="number" id="txtSize" value="32" min="8" max="200"/></div>
+                <div><label class="lbl">Color</label><input type="color" id="txtColor" value="#ffffff"/></div>
               </div>
-              <div>
-                <label class="lbl">Font family</label>
-                <select id="txtFont">
-                  <option value="sans-serif">Sans-serif</option>
-                  <option value="serif">Serif</option>
-                  <option value="monospace">Mono</option>
-                  <option value="cursive">Cursive</option>
-                </select>
+              <div class="grid2" style="margin-top:12px;">
+                <div><label class="lbl">Weight</label>
+                  <select id="txtWeight"><option value="normal">Normal</option><option value="bold">Bold</option></select>
+                </div>
+                <div><label class="lbl">Font</label>
+                  <select id="txtFont">
+                    <option value="sans-serif">Sans-serif</option>
+                    <option value="serif">Serif</option>
+                    <option value="monospace">Mono</option>
+                    <option value="cursive">Cursive</option>
+                  </select>
+                </div>
               </div>
-            </div>
-
-            <div style="margin-top:16px; display:flex; flex-direction:column; gap:8px;">
-              <button class="btn btn-primary" id="btnPlaceMode" style="width:100%;justify-content:center;">
-                📍 Place on image (click to position)
-              </button>
-              <button class="btn btn-ghost" id="btnAddCenter" style="width:100%;justify-content:center;font-size:12px;">
-                ＋ Add to center
-              </button>
+              <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+                <button class="btn btn-primary" id="btnPlaceMode" style="width:100%;justify-content:center;">📍 Place on image</button>
+                <button class="btn btn-ghost" id="btnAddCenter" style="width:100%;justify-content:center;font-size:12px;">＋ Add to center</button>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="panel" style="margin-top:14px;">
-          <div class="panel-head">Text Layers <span id="layerCount" style="color:var(--accent);"></span></div>
-          <div class="panel-body">
-            <div class="layer-list" id="layerList">
-              <div class="no-layers" id="noLayers">No text layers yet</div>
+        <!-- IMAGE TAB -->
+        <div class="tab-pane" id="paneImage">
+          <div class="panel">
+            <div class="panel-head">Image / Photo Overlay</div>
+            <div class="panel-body">
+
+              <!-- Drop zone for overlay image -->
+              <div class="img-dropzone" id="imgDropzone">
+                <input type="file" id="imgOverlayInput" accept="image/png,image/jpeg,image/webp,image/gif,image/svg+xml"/>
+                <span class="img-dropzone-icon">📷</span>
+                <div class="img-dropzone-text">Drop PNG / JPG / WEBP here<br/>or click to browse</div>
+              </div>
+
+              <!-- Thumb preview after selection -->
+              <div id="imgThumbRow" style="display:none;">
+                <div class="img-thumb-row">
+                  <img class="img-thumb" id="imgThumb" alt=""/>
+                  <span class="img-thumb-name" id="imgThumbName"></span>
+                  <button class="img-thumb-del" id="btnRemoveOverlay">✕</button>
+                </div>
+
+                <label class="lbl">Width on canvas (px)</label>
+                <input type="number" id="imgOverlaySize" value="200" min="20" max="2000"/>
+
+                <label class="lbl">Opacity</label>
+                <input type="range" id="imgOverlayOpacity" min="0.05" max="1" step="0.05" value="1"/>
+
+                <div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">
+                  <button class="btn btn-blue" id="btnPlaceModeImg" style="width:100%;justify-content:center;">📍 Place on image</button>
+                  <button class="btn btn-ghost" id="btnAddCenterImg" style="width:100%;justify-content:center;font-size:12px;">＋ Add to center</button>
+                </div>
+              </div>
+
             </div>
+          </div>
+        </div>
+
+        <!-- All Layers list -->
+        <div class="panel" style="margin-top:14px;">
+          <div class="panel-head">All Layers <span id="layerCount" style="color:var(--accent);"></span></div>
+          <div class="panel-body">
+            <div class="layer-list" id="layerList"></div>
           </div>
         </div>
 
@@ -405,11 +348,11 @@
     <div class="done-card">
       <span class="done-icon">✅</span>
       <div class="done-title">PDF is ready!</div>
-      <div class="done-sub">// text composited onto image at full native resolution</div>
+      <div class="done-sub">// all layers composited at full native resolution</div>
       <div class="done-btns">
         <button class="btn btn-primary" id="btnDownload">⬇ Download PDF</button>
         <a class="btn btn-ghost" id="btnOpenPDF" href="#" target="_blank" style="text-decoration:none;">↗ Open in new tab</a>
-        <button class="btn btn-ghost"   id="btnRestart">↺ Start over</button>
+        <button class="btn btn-ghost" id="btnRestart">↺ Start over</button>
       </div>
     </div>
   </div>
@@ -417,28 +360,42 @@
 </main>
 
 <script>
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    State
-═══════════════════════════════════════════════ */
-let imgFile    = null;
-let imgEl      = null;
-let layers     = [];   // {id, text, xPct, yPct, size, color, weight, font}
-let pdfDoc    = null;
-let placing    = false;
+═══════════════════════════════════ */
+let imgFile      = null;   // base image file
+let imgEl        = null;   // base image HTMLImageElement
+let layers       = [];     // mixed text + image layers
+let pdfDoc       = null;
+let placing      = false;  // text place mode
+let placingImg   = false;  // image place mode
+let overlayImgEl = null;   // currently selected overlay image element
+let overlayImgName = '';
 
 const canvas   = document.getElementById('mainCanvas');
 const ctx      = canvas.getContext('2d');
 const pinLayer = document.getElementById('pinLayer');
-const chH      = document.getElementById('chH');
-const chV      = document.getElementById('chV');
+const chH  = document.getElementById('chH');
+const chV  = document.getElementById('chV');
+const chH2 = document.getElementById('chH2');
+const chV2 = document.getElementById('chV2');
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
+   Tab switcher
+═══════════════════════════════════ */
+function switchTab(tab) {
+  document.getElementById('tabText').classList.toggle('active',  tab==='text');
+  document.getElementById('tabImage').classList.toggle('active', tab==='image');
+  document.getElementById('paneText').classList.toggle('active',  tab==='text');
+  document.getElementById('paneImage').classList.toggle('active', tab==='image');
+}
+
+/* ═══════════════════════════════════
    Step nav
-═══════════════════════════════════════════════ */
+═══════════════════════════════════ */
 function goTo(n) {
-  ['step1','step2','step3'].forEach((id,i) => {
-    document.getElementById(id).style.display = (i+1===n) ? 'block' : 'none';
-  });
+  ['step1','step2','step3'].forEach((id,i) =>
+    document.getElementById(id).style.display = (i+1===n) ? 'block' : 'none');
   [1,2,3].forEach(i => {
     const el = document.getElementById('si'+i);
     el.classList.toggle('active', i===n);
@@ -447,35 +404,27 @@ function goTo(n) {
   if (n===2) initCanvas();
 }
 
-/* ═══════════════════════════════════════════════
-   STEP 1
-═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════
+   STEP 1 — base image upload
+═══════════════════════════════════ */
 const dz = document.getElementById('dropzone');
 dz.addEventListener('dragover',  e => { e.preventDefault(); dz.classList.add('over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop',      e => { e.preventDefault(); dz.classList.remove('over'); loadFile(e.dataTransfer.files[0]); });
-document.getElementById('fileInput').addEventListener('change', e => loadFile(e.target.files[0]));
+dz.addEventListener('drop',      e => { e.preventDefault(); dz.classList.remove('over'); loadBaseFile(e.dataTransfer.files[0]); });
+document.getElementById('fileInput').addEventListener('change', e => loadBaseFile(e.target.files[0]));
 
-function loadFile(file) {
+function loadBaseFile(file) {
   if (!file || !file.type.startsWith('image/')) return;
   imgFile = file;
-
   const reader = new FileReader();
   reader.onload = e => {
-    const dataUrl = e.target.result;
-
-    // Show preview
-    const img = document.getElementById('previewImg');
-    img.src = dataUrl;
+    const url = e.target.result;
+    document.getElementById('previewImg').src = url;
     document.getElementById('previewName').textContent = file.name;
     document.getElementById('previewBox').style.display = 'block';
     document.getElementById('btnToStep2').disabled = false;
-
-    // Pre-load Image element for canvas — wait until fully decoded
     imgEl = new Image();
-    imgEl.onload = () => { /* ready */ };
-    imgEl.onerror = () => console.error('Image failed to load');
-    imgEl.src = dataUrl;
+    imgEl.src = url;
   };
   reader.readAsDataURL(file);
 }
@@ -486,90 +435,172 @@ document.getElementById('btnRemove').addEventListener('click', () => {
   document.getElementById('btnToStep2').disabled = true;
   document.getElementById('fileInput').value = '';
 });
-
 document.getElementById('btnToStep2').addEventListener('click', () => goTo(2));
 
-/* ═══════════════════════════════════════════════
-   STEP 2 – Canvas
-═══════════════════════════════════════════════ */
+/* ═══════════════════════════════════
+   Overlay image upload
+═══════════════════════════════════ */
+const imgDz = document.getElementById('imgDropzone');
+imgDz.addEventListener('dragover',  e => { e.preventDefault(); imgDz.classList.add('over'); });
+imgDz.addEventListener('dragleave', () => imgDz.classList.remove('over'));
+imgDz.addEventListener('drop',      e => { e.preventDefault(); imgDz.classList.remove('over'); loadOverlayFile(e.dataTransfer.files[0]); });
+document.getElementById('imgOverlayInput').addEventListener('change', e => loadOverlayFile(e.target.files[0]));
+
+function loadOverlayFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  overlayImgName = file.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const url = e.target.result;
+    document.getElementById('imgThumb').src = url;
+    document.getElementById('imgThumbName').textContent = file.name;
+    document.getElementById('imgThumbRow').style.display = 'block';
+    imgDz.style.display = 'none';
+    overlayImgEl = new Image();
+    overlayImgEl.src = url;
+  };
+  reader.readAsDataURL(file);
+}
+
+document.getElementById('btnRemoveOverlay').addEventListener('click', () => {
+  overlayImgEl = null; overlayImgName = '';
+  document.getElementById('imgThumbRow').style.display = 'none';
+  document.getElementById('imgDropzone').style.display = 'block';
+  document.getElementById('imgOverlayInput').value = '';
+});
+
+/* ═══════════════════════════════════
+   STEP 2 — Canvas
+═══════════════════════════════════ */
 function initCanvas() {
   const draw = () => {
-    if (!imgEl || !imgEl.naturalWidth) { console.error('Image not ready'); return; }
+    if (!imgEl || !imgEl.naturalWidth) return;
     canvas.width  = imgEl.naturalWidth;
     canvas.height = imgEl.naturalHeight;
     redraw();
   };
-  if (imgEl && imgEl.complete && imgEl.naturalWidth > 0 && imgEl.naturalHeight > 0) {
-    draw();
-  } else if (imgEl) {
-    imgEl.onload  = draw;
-    imgEl.onerror = () => console.error('Image failed in initCanvas');
-  }
+  if (imgEl && imgEl.complete && imgEl.naturalWidth > 0) draw();
+  else if (imgEl) { imgEl.onload = draw; imgEl.onerror = () => console.error('img load fail'); }
 }
 
 function redraw() {
-  if (!imgEl || !imgEl.complete || imgEl.naturalWidth === 0) return;
+  if (!imgEl || !imgEl.complete || !imgEl.naturalWidth) return;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.drawImage(imgEl, 0, 0);
-  layers.forEach(drawLayer);
+  layers.forEach(l => {
+    if (l.kind === 'text') drawTextLayer(l);
+    else drawImageLayer(l);
+  });
   renderPins();
   renderLayerList();
 }
 
-function drawLayer(l) {
+function drawTextLayer(l) {
   const x = l.xPct * canvas.width;
   const y = l.yPct * canvas.height;
   ctx.save();
-  ctx.font          = `${l.weight} ${l.size}px ${l.font}`;
-  ctx.fillStyle     = l.color;
-  ctx.textAlign     = 'center';
-  ctx.textBaseline  = 'middle';
-  ctx.shadowColor   = 'rgba(0,0,0,0.75)';
-  ctx.shadowBlur    = Math.max(4, l.size * 0.2);
+  ctx.font         = `${l.weight} ${l.size}px ${l.font}`;
+  ctx.fillStyle    = l.color;
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.shadowColor  = 'rgba(0,0,0,0.75)';
+  ctx.shadowBlur   = Math.max(4, l.size * 0.2);
   ctx.fillText(l.text, x, y);
   ctx.restore();
 }
 
-/* ─── Pin overlays ─── */
+function drawImageLayer(l) {
+  if (!l.imgEl || !l.imgEl.complete || !l.imgEl.naturalWidth) return;
+  const cx = l.xPct * canvas.width;
+  const cy = l.yPct * canvas.height;
+  const w  = l.sizePx;
+  const h  = w * (l.imgEl.naturalHeight / l.imgEl.naturalWidth);
+  ctx.save();
+  ctx.globalAlpha = l.opacity;
+  ctx.drawImage(l.imgEl, cx - w/2, cy - h/2, w, h);
+  ctx.restore();
+}
+
+/* ═══════════════════════════════════
+   Pin overlays
+═══════════════════════════════════ */
 function renderPins() {
   pinLayer.innerHTML = '';
   pinLayer.style.pointerEvents = 'none';
 
   layers.forEach(l => {
-    const pin = document.createElement('div');
-    pin.className = 'pin';
-    pin.style.cssText = `left:${l.xPct*100}%;top:${l.yPct*100}%;pointer-events:all;`;
-
-    pin.innerHTML = `
-      <div class="pin-label">
-        <span class="pin-text" style="color:${l.color}">${esc(l.text)}</span>
-        <button class="pin-del" data-id="${l.id}">×</button>
-      </div>
-      <div class="pin-stem"></div>
-      <div class="pin-dot"></div>`;
-
-    pin.querySelector('.pin-del').addEventListener('click', e => {
-      e.stopPropagation(); removeLayer(l.id);
-    });
-    makeDraggable(pin, l);
-    pinLayer.appendChild(pin);
+    if (l.kind === 'text') renderTextPin(l);
+    else renderImgPin(l);
   });
 
   document.getElementById('canvasHint').style.display = layers.length ? 'none' : '';
 }
 
-function esc(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function renderTextPin(l) {
+  const pin = document.createElement('div');
+  pin.className = 'pin';
+  pin.style.cssText = `left:${l.xPct*100}%;top:${l.yPct*100}%;pointer-events:all;`;
+  pin.innerHTML = `
+    <div class="pin-label">
+      <span class="pin-text" style="color:${l.color}">${esc(l.text)}</span>
+      <button class="pin-del">×</button>
+    </div>
+    <div class="pin-stem"></div>
+    <div class="pin-dot"></div>`;
+  pin.querySelector('.pin-del').addEventListener('click', e => { e.stopPropagation(); removeLayer(l.id); });
+  makeDraggable(pin, l);
+  pinLayer.appendChild(pin);
 }
 
-/* ─── Drag pins ─── */
+function renderImgPin(l) {
+  if (!l.imgEl) return;
+  const w = l.sizePx;
+  const h = l.imgEl.naturalWidth ? w * (l.imgEl.naturalHeight / l.imgEl.naturalWidth) : w;
+
+  // scale size from native canvas to display canvas
+  const r = canvas.getBoundingClientRect();
+  const scaleX = r.width  / canvas.width;
+  const dw = w * scaleX;
+  const dh = h * scaleX;
+
+  const pin = document.createElement('div');
+  pin.className = 'img-pin';
+  pin.style.cssText = `left:${l.xPct*100}%;top:${l.yPct*100}%;pointer-events:all;`;
+
+  const inner = document.createElement('div');
+  inner.className = 'img-pin-inner';
+
+  const im = document.createElement('img');
+  im.src = l.imgEl.src;
+  im.style.cssText = `width:${dw}px;height:${dh}px;opacity:${l.opacity};`;
+
+  const del = document.createElement('button');
+  del.className = 'img-pin-del'; del.textContent = '×';
+  del.addEventListener('click', e => { e.stopPropagation(); removeLayer(l.id); });
+
+  // resize handle
+  const rh = document.createElement('button');
+  rh.className = 'img-pin-resize';
+  rh.title = 'Drag to resize';
+  makeResizable(rh, l, im, scaleX);
+
+  inner.appendChild(im);
+  inner.appendChild(del);
+  inner.appendChild(rh);
+  pin.appendChild(inner);
+
+  makeDraggable(pin, l);
+  pinLayer.appendChild(pin);
+}
+
+/* ═══════════════════════════════════
+   Drag (shared by text & image pins)
+═══════════════════════════════════ */
 function makeDraggable(el, layer) {
   let ox, oy, lx, ly;
-  const getRect = () => canvas.getBoundingClientRect();
-
   const move = e => {
     const p = e.touches ? e.touches[0] : e;
-    const r = getRect();
+    const r = canvas.getBoundingClientRect();
     layer.xPct = Math.min(1, Math.max(0, lx + (p.clientX - ox) / r.width));
     layer.yPct = Math.min(1, Math.max(0, ly + (p.clientY - oy) / r.height));
     el.style.left = layer.xPct * 100 + '%';
@@ -583,7 +614,9 @@ function makeDraggable(el, layer) {
     document.removeEventListener('touchend',  up);
   };
   const down = e => {
-    if (e.target.classList.contains('pin-del')) return;
+    if (e.target.classList.contains('pin-del') ||
+        e.target.classList.contains('img-pin-del') ||
+        e.target.classList.contains('img-pin-resize')) return;
     e.preventDefault();
     const p = e.touches ? e.touches[0] : e;
     ox = p.clientX; oy = p.clientY;
@@ -597,31 +630,81 @@ function makeDraggable(el, layer) {
   el.addEventListener('touchstart', down, {passive:false});
 }
 
-/* ─── Crosshair on canvas hover (only when placing) ─── */
+/* ═══════════════════════════════════
+   Resize handle for image pins
+═══════════════════════════════════ */
+function makeResizable(handle, layer, imgEl, scaleX) {
+  let startX, startSize;
+  const move = e => {
+    const p = e.touches ? e.touches[0] : e;
+    const dx = (p.clientX - startX) / scaleX;
+    layer.sizePx = Math.max(20, startSize + dx);
+    // live-update the preview img size
+    const r = canvas.getBoundingClientRect();
+    const sc = r.width / canvas.width;
+    const w = layer.sizePx * sc;
+    const h = layer.imgEl.naturalWidth ? w * (layer.imgEl.naturalHeight / layer.imgEl.naturalWidth) : w;
+    imgEl.style.width  = w + 'px';
+    imgEl.style.height = h + 'px';
+  };
+  const up = () => {
+    redraw();
+    document.removeEventListener('mousemove', move);
+    document.removeEventListener('mouseup', up);
+    document.removeEventListener('touchmove', move);
+    document.removeEventListener('touchend', up);
+  };
+  handle.addEventListener('mousedown', e => {
+    e.preventDefault(); e.stopPropagation();
+    startX = e.clientX; startSize = layer.sizePx;
+    document.addEventListener('mousemove', move);
+    document.addEventListener('mouseup', up);
+  });
+  handle.addEventListener('touchstart', e => {
+    e.preventDefault(); e.stopPropagation();
+    startX = e.touches[0].clientX; startSize = layer.sizePx;
+    document.addEventListener('touchmove', move, {passive:false});
+    document.addEventListener('touchend', up);
+  });
+}
+
+/* ═══════════════════════════════════
+   Crosshair guides
+═══════════════════════════════════ */
 canvas.addEventListener('mousemove', e => {
-  if (!placing) return;
   const r = canvas.getBoundingClientRect();
-  const x = e.clientX - r.left;
-  const y = e.clientY - r.top;
-  chH.style.cssText = `display:block;top:${y}px;left:0;right:0;`;
-  chV.style.cssText = `display:block;left:${x}px;top:0;bottom:0;`;
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  if (placing) {
+    chH.style.cssText  = `display:block;top:${y}px;left:0;right:0;`;
+    chV.style.cssText  = `display:block;left:${x}px;top:0;bottom:0;`;
+  }
+  if (placingImg) {
+    chH2.style.cssText = `display:block;top:${y}px;left:0;right:0;`;
+    chV2.style.cssText = `display:block;left:${x}px;top:0;bottom:0;`;
+  }
 });
 canvas.addEventListener('mouseleave', () => {
-  chH.style.display = 'none';
-  chV.style.display = 'none';
+  [chH,chV,chH2,chV2].forEach(el => el.style.display='none');
 });
 
-/* ─── Click to place ─── */
+/* ═══════════════════════════════════
+   Click-to-place
+═══════════════════════════════════ */
 canvas.addEventListener('click', e => {
-  if (!placing) return;
-  const r = canvas.getBoundingClientRect();
+  const r   = canvas.getBoundingClientRect();
   const xPct = (e.clientX - r.left) / r.width;
   const yPct = (e.clientY - r.top)  / r.height;
-  addLayer(xPct, yPct);
-  exitPlace();
+
+  if (placing) {
+    addTextLayer(xPct, yPct);
+    exitPlace();
+  } else if (placingImg) {
+    addImgLayer(xPct, yPct);
+    exitPlaceImg();
+  }
 });
 
-/* ─── Place mode ─── */
+/* text place mode */
 document.getElementById('btnPlaceMode').addEventListener('click', () => {
   const txt = document.getElementById('txtInput').value.trim();
   if (!txt) { document.getElementById('txtInput').focus(); return; }
@@ -630,29 +713,45 @@ document.getElementById('btnPlaceMode').addEventListener('click', () => {
   document.getElementById('placeBar').classList.add('on');
 });
 document.getElementById('btnCancelPlace').addEventListener('click', exitPlace);
-
 function exitPlace() {
-  placing = false;
-  canvas.classList.remove('placing');
+  placing = false; canvas.classList.remove('placing');
   document.getElementById('placeBar').classList.remove('on');
-  chH.style.display = 'none';
-  chV.style.display = 'none';
+  [chH,chV].forEach(el => el.style.display='none');
 }
 
-/* ─── Add to center ─── */
+/* image place mode */
+document.getElementById('btnPlaceModeImg').addEventListener('click', () => {
+  if (!overlayImgEl) return;
+  placingImg = true;
+  canvas.classList.add('placing');
+  document.getElementById('placeBarImg').classList.add('on');
+});
+document.getElementById('btnCancelPlaceImg').addEventListener('click', exitPlaceImg);
+function exitPlaceImg() {
+  placingImg = false; canvas.classList.remove('placing');
+  document.getElementById('placeBarImg').classList.remove('on');
+  [chH2,chV2].forEach(el => el.style.display='none');
+}
+
+/* add to center */
 document.getElementById('btnAddCenter').addEventListener('click', () => {
-  const txt = document.getElementById('txtInput').value.trim();
-  if (!txt) { document.getElementById('txtInput').focus(); return; }
-  addLayer(0.5, 0.5);
+  if (!document.getElementById('txtInput').value.trim()) { document.getElementById('txtInput').focus(); return; }
+  addTextLayer(0.5, 0.5);
+});
+document.getElementById('btnAddCenterImg').addEventListener('click', () => {
+  if (!overlayImgEl) return;
+  addImgLayer(0.5, 0.5);
 });
 
-/* ─── Layer management ─── */
-function addLayer(xPct, yPct) {
+/* ═══════════════════════════════════
+   Layer factories
+═══════════════════════════════════ */
+function addTextLayer(xPct, yPct) {
   layers.push({
-    id:     Date.now() + Math.random(),
+    id: uid(), kind: 'text',
     text:   document.getElementById('txtInput').value.trim(),
     xPct, yPct,
-    size:   parseInt(document.getElementById('txtSize').value) || 32,
+    size:   parseInt(document.getElementById('txtSize').value)   || 32,
     color:  document.getElementById('txtColor').value,
     weight: document.getElementById('txtWeight').value,
     font:   document.getElementById('txtFont').value,
@@ -661,11 +760,28 @@ function addLayer(xPct, yPct) {
   redraw();
 }
 
+function addImgLayer(xPct, yPct) {
+  layers.push({
+    id: uid(), kind: 'image',
+    imgEl:   overlayImgEl,
+    name:    overlayImgName,
+    xPct, yPct,
+    sizePx:  parseInt(document.getElementById('imgOverlaySize').value) || 200,
+    opacity: parseFloat(document.getElementById('imgOverlayOpacity').value) || 1,
+  });
+  redraw();
+}
+
 function removeLayer(id) {
   layers = layers.filter(l => l.id !== id);
   redraw();
 }
 
+function uid() { return Date.now() + '_' + Math.random().toString(36).slice(2); }
+
+/* ═══════════════════════════════════
+   Layer list sidebar
+═══════════════════════════════════ */
 function renderLayerList() {
   const list = document.getElementById('layerList');
   document.getElementById('layerCount').textContent = layers.length ? `(${layers.length})` : '';
@@ -673,50 +789,72 @@ function renderLayerList() {
   if (!layers.length) {
     const empty = document.createElement('div');
     empty.className = 'no-layers';
-    empty.id = 'noLayers';
-    empty.textContent = 'No text layers yet';
+    empty.textContent = 'No layers yet';
     list.appendChild(empty);
     return;
   }
   layers.forEach(l => {
     const row = document.createElement('div');
     row.className = 'layer-item';
-    row.innerHTML = `
-      <div class="layer-swatch" style="background:${l.color}"></div>
-      <div class="layer-info">
-        <div class="layer-name">${esc(l.text)}</div>
-        <div class="layer-meta">${l.size}px · ${l.weight} · ${l.font}</div>
-      </div>
-      <button class="layer-del">×</button>`;
+    if (l.kind === 'text') {
+      row.innerHTML = `
+        <div class="layer-swatch" style="background:${l.color}"></div>
+        <div class="layer-info">
+          <div class="layer-name">${esc(l.text)}</div>
+          <div class="layer-meta">Text · ${l.size}px · ${l.font}</div>
+        </div>
+        <button class="layer-del">×</button>`;
+    } else {
+      row.innerHTML = `
+        <img class="layer-swatch-img" src="${l.imgEl.src}" alt=""/>
+        <div class="layer-info">
+          <div class="layer-name">${esc(l.name || 'image')}</div>
+          <div class="layer-meta">Image · ${l.sizePx}px wide · ${Math.round(l.opacity*100)}% opacity</div>
+        </div>
+        <button class="layer-del">×</button>`;
+    }
     row.querySelector('.layer-del').addEventListener('click', () => removeLayer(l.id));
     list.appendChild(row);
   });
 }
 
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 document.getElementById('btnBack').addEventListener('click', () => goTo(1));
 
-/* ═══════════════════════════════════════════════
+/* ═══════════════════════════════════
    Generate PDF
-═══════════════════════════════════════════════ */
+═══════════════════════════════════ */
 document.getElementById('btnGenPDF').addEventListener('click', () => {
-  // Draw to offscreen canvas at native resolution
   const off = document.createElement('canvas');
   off.width  = imgEl.naturalWidth;
   off.height = imgEl.naturalHeight;
   const oc = off.getContext('2d');
   oc.drawImage(imgEl, 0, 0);
+
   layers.forEach(l => {
-    const x = l.xPct * off.width;
-    const y = l.yPct * off.height;
-    oc.save();
-    oc.font = `${l.weight} ${l.size}px ${l.font}`;
-    oc.fillStyle = l.color;
-    oc.textAlign = 'center';
-    oc.textBaseline = 'middle';
-    oc.shadowColor = 'rgba(0,0,0,0.75)';
-    oc.shadowBlur  = Math.max(4, l.size * 0.2);
-    oc.fillText(l.text, x, y);
-    oc.restore();
+    if (l.kind === 'text') {
+      const x = l.xPct * off.width, y = l.yPct * off.height;
+      oc.save();
+      oc.font = `${l.weight} ${l.size}px ${l.font}`;
+      oc.fillStyle = l.color;
+      oc.textAlign = 'center';
+      oc.textBaseline = 'middle';
+      oc.shadowColor = 'rgba(0,0,0,0.75)';
+      oc.shadowBlur  = Math.max(4, l.size * 0.2);
+      oc.fillText(l.text, x, y);
+      oc.restore();
+    } else if (l.kind === 'image' && l.imgEl && l.imgEl.complete && l.imgEl.naturalWidth) {
+      const cx = l.xPct * off.width, cy = l.yPct * off.height;
+      const w  = l.sizePx;
+      const h  = w * (l.imgEl.naturalHeight / l.imgEl.naturalWidth);
+      oc.save();
+      oc.globalAlpha = l.opacity;
+      oc.drawImage(l.imgEl, cx - w/2, cy - h/2, w, h);
+      oc.restore();
+    }
   });
 
   const dataUrl = off.toDataURL('image/png');
@@ -729,28 +867,29 @@ document.getElementById('btnGenPDF').addEventListener('click', () => {
   const orient = pw >= ph ? 'landscape' : 'portrait';
   const doc = new jsPDF({ orientation: orient, unit: 'pt', format: [pw, ph] });
   doc.addImage(dataUrl, 'PNG', 0, 0, pw, ph);
-  pdfDoc = doc.output('datauristring');  // base64 data URI — not blocked by sandbox
-  goTo(3);
-  // also wire up the "open in new tab" link
+  pdfDoc = doc.output('datauristring');
   document.getElementById('btnOpenPDF').href = pdfDoc;
+  goTo(3);
 });
 
 document.getElementById('btnDownload').addEventListener('click', () => {
   if (!pdfDoc) return;
-  const filename = (imgFile?.name?.replace(/\.[^.]+$/, '') || 'annotated') + '.pdf';
   const a = document.createElement('a');
-  a.href = pdfDoc;          // base64 data URI
-  a.download = filename;
+  a.href = pdfDoc;
+  a.download = (imgFile?.name?.replace(/\.[^.]+$/, '') || 'annotated') + '.pdf';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
 });
 
 document.getElementById('btnRestart').addEventListener('click', () => {
-  imgFile = null; imgEl = null; layers = []; pdfDoc = null; placing = false;
+  imgFile = null; imgEl = null; layers = []; pdfDoc = null;
+  placing = false; placingImg = false; overlayImgEl = null; overlayImgName = '';
   document.getElementById('previewBox').style.display = 'none';
   document.getElementById('btnToStep2').disabled = true;
   document.getElementById('fileInput').value = '';
+  document.getElementById('imgThumbRow').style.display = 'none';
+  document.getElementById('imgDropzone').style.display = 'block';
   goTo(1);
 });
 </script>
